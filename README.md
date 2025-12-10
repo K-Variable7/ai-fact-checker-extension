@@ -55,7 +55,7 @@ This extension fact-checks articles and posts in real-time using AI.
 
 ## Demo
 
-Check out the live demo at [Vercel Link] to see the extension in action without installing.
+Check out the interactive demo at [demo/demo.html](demo/demo.html) to see the extension popup in action (open in browser).
 
 ![Overlay Example](demo/overlay.gif)
 ![Zap Flow](demo/zap.gif)

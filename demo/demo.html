@@ -16,7 +16,9 @@
         }
         h1 { color: #00ff88; text-align: center; }
         button { background: #00ff88; color: #000; border: none; padding: 10px; margin: 5px; cursor: pointer; }
+        button:hover { background: #00cc77; }
         textarea { width: 100%; height: 100px; }
+        #result { margin-top: 20px; padding: 10px; background: #333; border-radius: 8px; display: none; }
     </style>
 </head>
 <body>
@@ -31,19 +33,49 @@
         <option value="gpt-4">GPT-4</option>
         <option value="grok-beta">Grok Beta</option>
     </select>
-    <button>Fact-Check Selected Text</button>
-    <button>Fact-Check Page</button>
-    <div id="result" style="margin-top: 20px; padding: 10px; background: #333; border-radius: 8px;">
-        <strong>Result:</strong> This claim is likely true based on available data.
+    <button id="checkSelected">Fact-Check Selected Text</button>
+    <button id="checkPage">Fact-Check Page</button>
+    <div id="result">
+        <strong>Result:</strong> <span id="resultText">This claim is likely true based on available data.</span>
     </div>
-    <button>Share on Nostr</button>
-    <button>Zap 1 Sat</button>
-    <button>Toggle Theme</button>
+    <button id="shareNostr">Share on Nostr</button>
+    <button id="zap">Zap 1 Sat</button>
+    <button id="theme">Toggle Theme</button>
     <select id="help">
         <option>Help & Tips</option>
         <option>How to Use</option>
+        <option>Providers</option>
     </select>
     <textarea placeholder="Feedback..."></textarea>
-    <button>Submit Feedback</button>
+    <button id="submit">Submit Feedback</button>
+
+    <script>
+        document.getElementById('checkSelected').addEventListener('click', () => {
+            document.getElementById('result').style.display = 'block';
+            document.getElementById('resultText').textContent = 'Mock: Selected text fact-checked. Result: Partially true.';
+        });
+        document.getElementById('checkPage').addEventListener('click', () => {
+            document.getElementById('result').style.display = 'block';
+            document.getElementById('resultText').textContent = 'Mock: Page fact-checked. Result: Mostly accurate.';
+        });
+        document.getElementById('shareNostr').addEventListener('click', () => {
+            alert('Mock: Shared on Nostr!');
+        });
+        document.getElementById('zap').addEventListener('click', () => {
+            alert('Mock: Zapped 1 Sat!');
+        });
+        document.getElementById('theme').addEventListener('click', () => {
+            document.body.style.background = document.body.style.background === 'rgb(34, 34, 34)' ? '#fff' : '#222';
+            document.body.style.color = document.body.style.color === 'rgb(255, 255, 255)' ? '#000' : '#fff';
+        });
+        document.getElementById('help').addEventListener('change', (e) => {
+            if (e.target.value === 'How to Use') alert('Mock: Select text or page to check.');
+            if (e.target.value === 'Providers') alert('Mock: OpenAI for GPT, xAI for Grok.');
+            e.target.value = 'Help & Tips';
+        });
+        document.getElementById('submit').addEventListener('click', () => {
+            alert('Mock: Feedback submitted!');
+        });
+    </script>
 </body>
 </html>
