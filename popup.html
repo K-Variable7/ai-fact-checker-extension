@@ -2,12 +2,11 @@
 <html>
 <head>
   <title>AI Fact-Checker</title>
-  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&display=swap" rel="stylesheet">
   <style>
     body {
       width: 340px;
       padding: 20px;
-      font-family: 'Fira Code', 'Courier New', monospace;
+      font-family: 'Courier New', monospace;
       background: linear-gradient(135deg, rgba(10,10,10,0.9) 0%, rgba(26,26,26,0.9) 50%, rgba(10,10,10,0.9) 100%), url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="50" cy="50" r="1" fill="rgba(0,255,136,0.1)"/></svg>');
       background-size: 20px 20px;
       color: #ffffff;
@@ -202,16 +201,8 @@
     .star:hover, .star.selected {
       color: #00ff88;
     }
-    #feedback textarea {
-      width: 100%;
-      height: 60px;
-      margin: 10px 0;
-      background: #222222;
-      color: #ffffff;
-      border: 1px solid #444444;
-      border-radius: 4px;
-      padding: 5px;
-      font-family: 'Fira Code', monospace;
+    body.light #donation {
+      color: #333333;
     }
     /* Light theme */
     body.light {
@@ -299,8 +290,16 @@
     Donate BTC: bc1qf2j96j70j9I3cs3gh8048mgxpg3su5ydse6z9m
   </div>
   <button id="themeToggle" style="margin-top: 10px;">Toggle Theme</button>
-  <button id="helpBtn" style="margin-top: 10px; width: 100%;">Help</button>
-  <script src="https://unpkg.com/nostr-tools@2.5.2/lib/nostr.cjs.js"></script>
+  <select id="helpDropdown" style="margin-top: 10px; width: 100%;">
+    <option value="">Help & Tips</option>
+    <option value="usage">How to Use</option>
+    <option value="providers">AI Providers</option>
+    <option value="shortcuts">Keyboard Shortcuts</option>
+    <option value="export">Export Results</option>
+    <option value="feedback">Feedback</option>
+    <option value="donate">Donate</option>
+  </select>
+  <script src="lib/nostr.cjs.js"></script>
   <script src="popup.js"></script>
 </body>
 </html>

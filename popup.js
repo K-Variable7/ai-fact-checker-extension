@@ -125,7 +125,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     document.getElementById('searchSnopesBtn').textContent = l.searchSnopes;
     document.getElementById('searchFactCheckBtn').textContent = l.searchFactCheck;
     themeToggle.textContent = l.toggleTheme;
-    document.getElementById('helpBtn').textContent = l.help;
   };
 
   // Load saved API key, reports, checkCount, lang, provider, model, theme
@@ -334,12 +333,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
   });
 
-  zapBtn.addEventListener('click', () => {
-    // Placeholder LNURL for zapping (replace with real one)
-    const lnurl = 'lightning:lnurl1dp68gurn8ghj7um9wfmxjcm99e3k7mf0v9cxj0m385ekvcenxc6r2c35xvukxefcv5mkvv34x5ekzd3ev56nyd3hxqurzepexejxxepnxscrvwfnv9nxzcn9xq6xyefhvgcxxcmyxymnserxfq5fns'; // Example, replace with your LNURL
-    window.open(lnurl, '_blank');
-  });
-
   document.getElementById('zap1Btn').addEventListener('click', () => {
     const lnurl = 'lightning:lnurl1dp68gurn8ghj7um9wfmxjcm99e3k7mf0v9cxj0m385ekvcenxc6r2c35xvukxefcv5mkvv34x5ekzd3ev56nyd3hxqurzepexejxxepnxscrvwfnv9nxzcn9xq6xyefhvgcxxcmyxymnserxfq5fns'; // Tip LNURL
     window.open(lnurl, '_blank');
@@ -437,7 +430,21 @@ document.addEventListener('DOMContentLoaded', async () => {
     window.open(`https://www.factcheck.org/search/?q=${query}`, '_blank');
   });
 
-  document.getElementById('helpBtn').addEventListener('click', () => {
-    window.open('https://github.com/yourusername/ai-fact-checker-extension/blob/main/README.md', '_blank'); // Replace with actual repo URL
+  document.getElementById('helpDropdown').addEventListener('change', (e) => {
+    const value = e.target.value;
+    if (value === 'usage') {
+      alert('Select text or click "Fact-Check Page" to check content. Choose AI provider and model for best results.');
+    } else if (value === 'providers') {
+      alert('OpenAI: GPT-3.5/4 for accurate checks. xAI: Grok for fast, witty responses.');
+    } else if (value === 'shortcuts') {
+      alert('Ctrl+Shift+F: Fact-check selected text. Ctrl+Shift+P: Fact-check page.');
+    } else if (value === 'export') {
+      alert('After checking, click "Export Results" to download a JSON file.');
+    } else if (value === 'feedback') {
+      alert('Use the feedback section to rate and comment. Helps improve the extension!');
+    } else if (value === 'donate') {
+      alert('Support development with BTC: bc1qf2j96j70j9I3cs3gh8048mgxpg3su5ydse6z9m or zaps.');
+    }
+    e.target.value = ''; // Reset dropdown
   });
 });
