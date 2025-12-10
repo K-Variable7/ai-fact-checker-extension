@@ -53,14 +53,32 @@ This extension fact-checks articles and posts in real-time using AI.
 - Note: Limited to 1 check/minute and 5 free/day to control costs. Ensure selected/page text has substantial content for accurate results.
 - Made with love for truth. Donate BTC: bc1qf2j96j70j9I3cs3gh8048mgxpg3su5ydse6z9m
 
+## Demo
+
+Check out the live demo at [Vercel Link] to see the extension in action without installing.
+
+![Overlay Example](demo/overlay.gif)
+![Zap Flow](demo/zap.gif)
+
 ## Future Features
 
 - Real-time scanning on social media.
 - Firebase for global reports/badges.
 - Premium ad-free version.
 
+## Installation
+
+1. Download the extension from the [Chrome Web Store] or [Firefox Add-ons].
+2. Load unpacked in Chrome: Go to chrome://extensions, enable Developer mode, click "Load unpacked", select the extension folder.
+3. For Firefox: Load as temporary add-on or package for AMO.
+
+## Beta Testers Wanted
+
+Help us test and improve! Post feedback on Nostr or X with #AIFactChecker. Early testers get zaps as rewards.
+
 ## Tech Stack
 
 - JavaScript
-- Chrome Extension API
+- Chrome/Firefox Extension API
 - OpenAI API
+- xAI Grok API

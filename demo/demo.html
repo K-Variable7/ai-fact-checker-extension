@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Fact-Checker Demo</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 340px;
+            margin: 20px auto;
+            padding: 20px;
+            background: #222;
+            color: #fff;
+            border-radius: 12px;
+        }
+        h1 { color: #00ff88; text-align: center; }
+        button { background: #00ff88; color: #000; border: none; padding: 10px; margin: 5px; cursor: pointer; }
+        textarea { width: 100%; height: 100px; }
+    </style>
+</head>
+<body>
+    <h1>AI Fact-Checker Demo</h1>
+    <p>This is a static demo of the extension popup. Install the extension for full functionality.</p>
+    <select id="provider">
+        <option value="openai">OpenAI</option>
+        <option value="xai">xAI (Grok)</option>
+    </select>
+    <select id="model">
+        <option value="gpt-3.5-turbo">GPT-3.5</option>
+        <option value="gpt-4">GPT-4</option>
+        <option value="grok-beta">Grok Beta</option>
+    </select>
+    <button>Fact-Check Selected Text</button>
+    <button>Fact-Check Page</button>
+    <div id="result" style="margin-top: 20px; padding: 10px; background: #333; border-radius: 8px;">
+        <strong>Result:</strong> This claim is likely true based on available data.
+    </div>
+    <button>Share on Nostr</button>
+    <button>Zap 1 Sat</button>
+    <button>Toggle Theme</button>
+    <select id="help">
+        <option>Help & Tips</option>
+        <option>How to Use</option>
+    </select>
+    <textarea placeholder="Feedback..."></textarea>
+    <button>Submit Feedback</button>
+</body>
+</html>

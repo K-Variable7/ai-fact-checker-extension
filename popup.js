@@ -93,6 +93,27 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
   };
 
+  // Function to query related fact-checks from Nostr relays
+  const queryRelatedFactChecks = async (url, result) => {
+    const relay = new Relay('wss://relay.damus.io');
+    await relay.connect();
+    const related = [];
+    const sub = relay.sub([
+      {
+        kinds: [1],
+        '#t': ['factcheck'],
+        search: url.split('/').pop() // Simple keyword from URL
+      }
+    ]);
+    sub.on('event', (event) => {
+      related.push(event.content.substring(0, 50) + '...');
+    });
+    await new Promise(resolve => setTimeout(resolve, 2000)); // Wait 2s for events
+    sub.unsub();
+    relay.close();
+    return related;
+  };
+
   let currentLang = 'en';
 
   const updateModels = () => {
@@ -312,11 +333,15 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 
     try {
+      // Query for related fact-checks on Nostr
+      const relatedChecks = await queryRelatedFactChecks(url, result);
+      const relatedText = relatedChecks.length > 0 ? `\n\nRelated checks on Nostr: ${relatedChecks.slice(0, 3).join(', ')}` : '';
+
       const event = {
         kind: 1,
         created_at: Math.floor(Date.now() / 1000),
         tags: [['t', 'factcheck'], ['r', url]],
-        content: `AI Fact-Check: ${result}\n\nSource: ${url}\n\n#factcheck #AI`
+        content: `AI Fact-Check: ${result}\n\nSource: ${url}${relatedText}\n\n#factcheck #AI`
       };
 
       const signedEvent = await window.nostr.signEvent(event);

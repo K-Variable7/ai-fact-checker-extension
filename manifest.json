@@ -40,6 +40,12 @@
   "content_security_policy": {
     "extension_pages": "script-src 'self' 'wasm-unsafe-eval' http://localhost:* http://127.0.0.1:*;"
   },
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "ai-fact-checker@k-variable7.github.io",
+      "strict_min_version": "109.0"
+    }
+  },
   "commands": {
     "fact-check-selected": {
       "suggested_key": {
