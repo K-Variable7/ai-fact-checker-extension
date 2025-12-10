@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>AI Fact-Checker</title>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    body {
+      width: 340px;
+      padding: 20px;
+      font-family: 'Fira Code', 'Courier New', monospace;
+      background: linear-gradient(135deg, rgba(10,10,10,0.9) 0%, rgba(26,26,26,0.9) 50%, rgba(10,10,10,0.9) 100%), url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="50" cy="50" r="1" fill="rgba(0,255,136,0.1)"/></svg>');
+      background-size: 20px 20px;
+      color: #ffffff;
+      margin: 0;
+      border-radius: 12px;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.8), inset 0 1px 0 rgba(255,255,255,0.1);
+      border: 1px solid rgba(0,255,136,0.3);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      position: relative;
+      overflow: hidden;
+    }
+    body::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, #00ff88, #007bff, #dc3545, #00ff88);
+      background-size: 400% 400%;
+      animation: shimmer 3s ease-in-out infinite;
+    }
+    h3 {
+      margin: 0 0 20px 0;
+      color: #00ff88;
+      text-align: center;
+      font-size: 20px;
+      font-weight: 600;
+      text-shadow: 0 0 10px #00ff88;
+    }
+    #badge {
+      font-size: 11px;
+      color: #cccccc;
+      margin-bottom: 15px;
+      text-align: center;
+      background: #222222;
+      padding: 8px;
+      border-radius: 8px;
+      border: 1px solid #444444;
+    }
+    label {
+      display: block;
+      margin-bottom: 8px;
+      color: #ffffff;
+      font-weight: 500;
+      font-size: 12px;
+    }
+    input {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 15px;
+      border: 1px solid #555555;
+      border-radius: 8px;
+      box-sizing: border-box;
+      font-size: 12px;
+      background: #333333;
+      color: #ffffff;
+      font-family: 'Fira Code', monospace;
+    }
+    input:focus {
+      outline: none;
+      border-color: #00ff88;
+      box-shadow: 0 0 8px #00ff88;
+    }
+    button {
+      padding: 12px 16px;
+      margin: 6px;
+      border: 1px solid rgba(85,85,85,0.5);
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 500;
+      transition: all 0.3s ease;
+      background: linear-gradient(135deg, rgba(34,34,34,0.8) 0%, rgba(51,51,51,0.8) 100%);
+      color: #ffffff;
+      flex: 1;
+      font-size: 12px;
+      font-family: 'Fira Code', monospace;
+      position: relative;
+      overflow: hidden;
+    }
+    button::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+      transition: left 0.5s;
+    }
+    button:hover::before {
+      left: 100%;
+    }
+    button:hover {
+      background: linear-gradient(135deg, rgba(51,51,51,0.9) 0%, rgba(68,68,68,0.9) 100%);
+      border-color: rgba(119,119,119,0.7);
+      box-shadow: 0 0 20px rgba(0,255,136,0.5), inset 0 1px 0 rgba(255,255,255,0.1);
+      transform: translateY(-3px) scale(1.02);
+    }
+    #saveKey {
+      background: #28a745;
+      border-color: #28a745;
+    }
+    #saveKey:hover {
+      background: #218838;
+      border-color: #218838;
+      box-shadow: 0 0 12px #28a745;
+    }
+    #checkBtn, #checkSelectedBtn {
+      background: #007bff;
+      border-color: #007bff;
+    }
+    #checkBtn:hover, #checkSelectedBtn:hover {
+      background: #0056b3;
+      border-color: #0056b3;
+      box-shadow: 0 0 12px #007bff;
+    }
+    #reportBtn {
+      background: #dc3545;
+      border-color: #dc3545;
+    }
+    #reportBtn:hover {
+      background: #c82333;
+      border-color: #c82333;
+      box-shadow: 0 0 12px #dc3545;
+    }
+    #shareNostrBtn, #zapBtn {
+      background: #6f42c1;
+      border-color: #6f42c1;
+    }
+    #shareNostrBtn:hover, #zapBtn:hover {
+      background: #5a32a3;
+      border-color: #5a32a3;
+      box-shadow: 0 0 12px #6f42c1;
+    }
+    button:disabled {
+      background: #444444;
+      color: #888888;
+      border-color: #444444;
+      cursor: not-allowed;
+      box-shadow: none;
+    }
+    .button-row {
+      display: flex;
+      justify-content: space-between;
+    }
+    #result {
+      margin-top: 20px;
+      padding: 12px;
+      background: linear-gradient(135deg, rgba(34,34,34,0.8) 0%, rgba(51,51,51,0.8) 100%);
+      border: 1px solid rgba(68,68,68,0.5);
+      border-radius: 8px;
+      min-height: 60px;
+      color: #ffffff;
+      font-size: 12px;
+      line-height: 1.5;
+      font-family: 'Fira Code', monospace;
+      backdrop-filter: blur(5px);
+      -webkit-backdrop-filter: blur(5px);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.1);
+    }
+    .spinner {
+      display: inline-block;
+      width: 14px;
+      height: 14px;
+      border: 2px solid #333333;
+      border-top: 2px solid #00ff88;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin-right: 8px;
+    }
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    @keyframes shimmer {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+    #stars {
+      text-align: center;
+      margin: 10px 0;
+    }
+    .star {
+      font-size: 24px;
+      color: #cccccc;
+      cursor: pointer;
+      transition: color 0.2s;
+    }
+    .star:hover, .star.selected {
+      color: #00ff88;
+    }
+    #feedback textarea {
+      width: 100%;
+      height: 60px;
+      margin: 10px 0;
+      background: #222222;
+      color: #ffffff;
+      border: 1px solid #444444;
+      border-radius: 4px;
+      padding: 5px;
+      font-family: 'Fira Code', monospace;
+    }
+    /* Light theme */
+    body.light {
+      background: linear-gradient(135deg, rgba(240,240,240,0.9) 0%, rgba(255,255,255,0.9) 50%, rgba(240,240,240,0.9) 100%);
+      color: #000000;
+      border: 1px solid rgba(0,123,255,0.3);
+      box-shadow: 0 8px 32px rgba(0,0,0,0.2), inset 0 1px 0 rgba(0,0,0,0.1);
+    }
+    body.light h3 {
+      color: #007bff;
+      text-shadow: 0 0 10px #007bff;
+    }
+    body.light #badge {
+      color: #333333;
+      background: #f8f9fa;
+      border: 1px solid #cccccc;
+    }
+    body.light button {
+      background: #007bff;
+      color: #ffffff;
+      border: 1px solid #0056b3;
+    }
+    body.light button:hover {
+      background: #0056b3;
+    }
+    body.light input, body.light select {
+      background: #ffffff;
+      color: #000000;
+      border: 1px solid #cccccc;
+    }
+    body.light #donation {
+      color: #333333;
+    }
+  </style>
+</head>
+<body>
+  <h3>AI Fact-Checker</h3>
+  <div id="badge"></div>
+  <label for="apiKey">API Key:</label>
+  <input type="password" id="apiKey" placeholder="sk-...">
+  <select id="langSelect">
+    <option value="en">English</option>
+    <option value="es">Spanish</option>
+  </select>
+  <select id="providerSelect">
+    <option value="openai">OpenAI</option>
+    <option value="xai">xAI (Grok)</option>
+  </select>
+  <select id="modelSelect">
+    <!-- Options updated by JS -->
+  </select>
+  <button id="saveKey">Save Key</button>
+  <div class="button-row">
+    <button id="checkBtn">Check Page</button>
+    <button id="checkSelectedBtn">Check Selected</button>
+  </div>
+  <button id="reportBtn">Report Misinfo</button>
+  <button id="shareNostrBtn" style="display: none;">Share on Nostr</button>
+  <div id="zapOptions" style="display: none;">
+    <button id="zap1Btn">Zap 1 Sat (Tip)</button>
+    <button id="zap10Btn">Zap 10 Sats (5 More Checks)</button>
+    <button id="zapOverrideBtn" style="display: none;">Zap 100 Sats (Override Result)</button>
+  </div>
+  <div id="result"></div>
+  <div id="extraActions" style="display: none; margin-top: 10px;">
+    <button id="copyResultBtn">Copy Result</button>
+    <button id="exportResultBtn">Export Result</button>
+    <button id="searchSnopesBtn">Search on Snopes</button>
+    <button id="searchFactCheckBtn">Search on FactCheck.org</button>
+  </div>
+  <div id="feedback" style="display: none;">
+    <p>Rate this check:</p>
+    <div id="stars">
+      <span class="star" data-value="1">★</span>
+      <span class="star" data-value="2">★</span>
+      <span class="star" data-value="3">★</span>
+      <span class="star" data-value="4">★</span>
+      <span class="star" data-value="5">★</span>
+    </div>
+    <textarea id="feedbackText" placeholder="Comments..."></textarea>
+    <button id="submitFeedback">Submit Feedback</button>
+  </div>
+  <div id="donation" style="margin-top: 20px; text-align: center; font-size: 12px; color: #cccccc;">
+    Made with love for truth<br>
+    Donate BTC: bc1qf2j96j70j9I3cs3gh8048mgxpg3su5ydse6z9m
+  </div>
+  <button id="themeToggle" style="margin-top: 10px;">Toggle Theme</button>
+  <button id="helpBtn" style="margin-top: 10px; width: 100%;">Help</button>
+  <script src="https://unpkg.com/nostr-tools@2.5.2/lib/nostr.cjs.js"></script>
+  <script src="popup.js"></script>
+</body>
+</html>
